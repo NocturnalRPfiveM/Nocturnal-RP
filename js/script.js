@@ -1,4 +1,5 @@
-const STATUS_DATA_URL = 'data/status.json';
+const BASE = window.location.pathname.replace(/\/?$/, '/');
+const STATUS_DATA_URL = BASE + 'data/status.json';
 const REFRESH_INTERVAL = 60000;
 
 const playerCountEl = document.getElementById('playerCount');
