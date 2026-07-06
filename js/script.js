@@ -1,64 +1,32 @@
-const SERVER_IP = '5.249.165.174';
-const SERVER_PORT = '30106';
-const CORS_URL = `http://${SERVER_IP}:${SERVER_PORT}/cors/dynamic.json`;
-const CFX_RE_API = 'https://servers-frontend.fivem.net/api/servers/single/rodoqg';
-const REFRESH_INTERVAL = 30000;
+const STATUS_DATA_URL = 'data/status.json';
+const REFRESH_INTERVAL = 60000;
 
 const playerCountEl = document.getElementById('playerCount');
 const serverStatusEl = document.getElementById('serverStatus');
 const maxPlayersEl = document.getElementById('maxPlayers');
 
 async function fetchServerData() {
-  const data = await tryCorsEndpoint();
-  if (data) {
-    updateStats(data);
-    return;
-  }
-
   try {
-    const response = await fetch(CFX_RE_API, { headers: { 'Accept': 'application/json' } });
-    if (response.ok) {
-      const data = await response.json();
-      if (data && data.Data && data.Data.server) {
-        const server = data.Data.server;
-        const clients = data.Data.clients;
-        if (server.up === true || server.up === 'true') {
-          animateNumber(playerCountEl, clients ? parseInt(clients, 10) : 0);
-          serverStatusEl.textContent = 'Online';
-          serverStatusEl.style.color = '#4ade80';
-          maxPlayersEl.textContent = server.sv_maxclients ? parseInt(server.sv_maxclients, 10) : 64;
-          return;
-        }
-      }
-    }
-  } catch (_) {}
-
-  setOffline();
-}
-
-async function tryCorsEndpoint() {
-  try {
-    const response = await fetch(CORS_URL, { mode: 'cors' });
-    if (!response.ok) return null;
+    const response = await fetch(STATUS_DATA_URL);
+    if (!response.ok) throw new Error('Failed');
     const data = await response.json();
-    if (data && data.clients !== undefined) {
-      return {
-        clients: parseInt(data.clients, 10) || 0,
-        maxClients: parseInt(data.sv_maxclients, 10) || 48,
-      };
-    }
-    return null;
+    updateStats(data);
   } catch (_) {
-    return null;
+    setOffline();
   }
 }
 
 function updateStats(data) {
-  if (!data) { setOffline(); return; }
-  animateNumber(playerCountEl, data.clients || 0);
+  if (!data || data.clients === undefined) {
+    setOffline();
+    return;
+  }
+  const clients = parseInt(data.clients, 10) || 0;
+  const maxClients = parseInt(data.sv_maxclients, 10) || 48;
+  animateNumber(playerCountEl, clients);
   serverStatusEl.textContent = 'Online';
   serverStatusEl.style.color = '#4ade80';
-  maxPlayersEl.textContent = data.maxClients || '--';
+  maxPlayersEl.textContent = maxClients;
 }
 
 function setOffline() {

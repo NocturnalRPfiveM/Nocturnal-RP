@@ -1,0 +1,36 @@
+name: Update Server Status
+
+on:
+  schedule:
+    - cron: '*/3 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch server data
+        run: |
+          data=$(curl -s --max-time 5 http://5.249.165.174:30106/dynamic.json 2>/dev/null || echo "")
+          if [ -z "$data" ] || [ "$data" = "null" ]; then
+            echo '{"clients":0,"sv_maxclients":"48"}' > data/status.json
+          else
+            echo "$data" > data/status.json
+          fi
+
+      - name: Commit and push
+        run: |
+          git config user.name "Nocturnal Bot"
+          git config user.email "bot@nocturnalrp.com"
+          git add data/status.json
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update server status [skip ci]"
+            git push
+          fi
