@@ -1,6 +1,6 @@
 const SERVER_IP = '5.249.165.174';
 const SERVER_PORT = '30106';
-const DIRECT_URL = `http://${SERVER_IP}:${SERVER_PORT}/dynamic.json`;
+const CORS_URL = `http://${SERVER_IP}:${SERVER_PORT}/cors/dynamic.json`;
 const CFX_RE_API = 'https://servers-frontend.fivem.net/api/servers/single/rodoqg';
 const REFRESH_INTERVAL = 30000;
 
@@ -9,13 +9,11 @@ const serverStatusEl = document.getElementById('serverStatus');
 const maxPlayersEl = document.getElementById('maxPlayers');
 
 async function fetchServerData() {
-  try {
-    const data = await tryDirectFetch();
-    if (data) {
-      updateStats(data);
-      return;
-    }
-  } catch (_) {}
+  const data = await tryCorsEndpoint();
+  if (data) {
+    updateStats(data);
+    return;
+  }
 
   try {
     const response = await fetch(CFX_RE_API, { headers: { 'Accept': 'application/json' } });
@@ -25,12 +23,10 @@ async function fetchServerData() {
         const server = data.Data.server;
         const clients = data.Data.clients;
         if (server.up === true || server.up === 'true') {
-          const currentPlayers = clients ? parseInt(clients, 10) : 0;
-          const maxPlayers = server.sv_maxclients ? parseInt(server.sv_maxclients, 10) : 64;
-          animateNumber(playerCountEl, currentPlayers);
+          animateNumber(playerCountEl, clients ? parseInt(clients, 10) : 0);
           serverStatusEl.textContent = 'Online';
           serverStatusEl.style.color = '#4ade80';
-          maxPlayersEl.textContent = maxPlayers;
+          maxPlayersEl.textContent = server.sv_maxclients ? parseInt(server.sv_maxclients, 10) : 64;
           return;
         }
       }
@@ -40,19 +36,10 @@ async function fetchServerData() {
   setOffline();
 }
 
-async function tryDirectFetch() {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
+async function tryCorsEndpoint() {
   try {
-    const response = await fetch(DIRECT_URL, {
-      signal: controller.signal,
-      mode: 'cors',
-    });
-    clearTimeout(timeoutId);
-
+    const response = await fetch(CORS_URL, { mode: 'cors' });
     if (!response.ok) return null;
-
     const data = await response.json();
     if (data && data.clients !== undefined) {
       return {
@@ -62,17 +49,12 @@ async function tryDirectFetch() {
     }
     return null;
   } catch (_) {
-    clearTimeout(timeoutId);
     return null;
   }
 }
 
 function updateStats(data) {
-  if (!data) {
-    setOffline();
-    return;
-  }
-
+  if (!data) { setOffline(); return; }
   animateNumber(playerCountEl, data.clients || 0);
   serverStatusEl.textContent = 'Online';
   serverStatusEl.style.color = '#4ade80';
@@ -89,17 +71,12 @@ function setOffline() {
 function animateNumber(el, target) {
   const current = parseInt(el.textContent, 10) || 0;
   if (current === target) return;
-
   const diff = target - current;
   const step = Math.ceil(Math.abs(diff) / 20);
   let val = current;
-
   const timer = setInterval(() => {
-    if (diff > 0) {
-      val = Math.min(val + step, target);
-    } else {
-      val = Math.max(val - step, target);
-    }
+    if (diff > 0) val = Math.min(val + step, target);
+    else val = Math.max(val - step, target);
     el.textContent = val;
     if (val === target) clearInterval(timer);
   }, 40);
@@ -109,27 +86,15 @@ fetchServerData();
 setInterval(fetchServerData, REFRESH_INTERVAL);
 
 const header = document.querySelector('.header');
-
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
-  }
+  header.classList.toggle('scrolled', window.scrollY > 50);
 });
-
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px',
-};
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
+    if (entry.isIntersecting) entry.target.classList.add('visible');
   });
-}, observerOptions);
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
 document.querySelectorAll('.feature-card, .about-stat-card, .section-header').forEach((el) => {
   el.classList.add('reveal');

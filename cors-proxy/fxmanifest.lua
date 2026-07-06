@@ -1,0 +1,6 @@
+fx_version 'cerulean'
+game 'gta5'
+author 'Nocturnal RP'
+description 'CORS proxy for server status API'
+version '1.0.0'
+server_script 'server.lua'
