@@ -1,5 +1,7 @@
-const SERVER_ID = 'rodoqg';
-const API_URL = `https://servers-frontend.fivem.net/api/servers/single/${SERVER_ID}`;
+const SERVER_IP = '5.249.165.174';
+const SERVER_PORT = '30106';
+const DIRECT_URL = `http://${SERVER_IP}:${SERVER_PORT}/dynamic.json`;
+const CFX_RE_API = 'https://servers-frontend.fivem.net/api/servers/single/rodoqg';
 const REFRESH_INTERVAL = 30000;
 
 const playerCountEl = document.getElementById('playerCount');
@@ -8,43 +10,73 @@ const maxPlayersEl = document.getElementById('maxPlayers');
 
 async function fetchServerData() {
   try {
-    const response = await fetch(API_URL, {
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    const data = await tryDirectFetch();
+    if (data) {
+      updateStats(data);
+      return;
     }
+  } catch (_) {}
+
+  try {
+    const response = await fetch(CFX_RE_API, { headers: { 'Accept': 'application/json' } });
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.Data && data.Data.server) {
+        const server = data.Data.server;
+        const clients = data.Data.clients;
+        if (server.up === true || server.up === 'true') {
+          const currentPlayers = clients ? parseInt(clients, 10) : 0;
+          const maxPlayers = server.sv_maxclients ? parseInt(server.sv_maxclients, 10) : 64;
+          animateNumber(playerCountEl, currentPlayers);
+          serverStatusEl.textContent = 'Online';
+          serverStatusEl.style.color = '#4ade80';
+          maxPlayersEl.textContent = maxPlayers;
+          return;
+        }
+      }
+    }
+  } catch (_) {}
+
+  setOffline();
+}
+
+async function tryDirectFetch() {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+  try {
+    const response = await fetch(DIRECT_URL, {
+      signal: controller.signal,
+      mode: 'cors',
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) return null;
 
     const data = await response.json();
-    updateStats(data);
-  } catch (err) {
-    setOffline();
+    if (data && data.clients !== undefined) {
+      return {
+        clients: parseInt(data.clients, 10) || 0,
+        maxClients: parseInt(data.sv_maxclients, 10) || 48,
+      };
+    }
+    return null;
+  } catch (_) {
+    clearTimeout(timeoutId);
+    return null;
   }
 }
 
 function updateStats(data) {
-  if (!data || !data.Data || !data.Data.server) {
+  if (!data) {
     setOffline();
     return;
   }
 
-  const server = data.Data.server;
-  const clients = data.Data.clients;
-
-  if (server.up === true || server.up === 'true') {
-    const currentPlayers = clients ? parseInt(clients, 10) : 0;
-    const maxPlayers = server.sv_maxclients ? parseInt(server.sv_maxclients, 10) : 64;
-
-    animateNumber(playerCountEl, currentPlayers);
-    serverStatusEl.textContent = 'Online';
-    serverStatusEl.style.color = '#4ade80';
-    maxPlayersEl.textContent = maxPlayers;
-  } else {
-    setOffline();
-  }
+  animateNumber(playerCountEl, data.clients || 0);
+  serverStatusEl.textContent = 'Online';
+  serverStatusEl.style.color = '#4ade80';
+  maxPlayersEl.textContent = data.maxClients || '--';
 }
 
 function setOffline() {
@@ -76,21 +108,16 @@ function animateNumber(el, target) {
 fetchServerData();
 setInterval(fetchServerData, REFRESH_INTERVAL);
 
-// Header scroll effect
 const header = document.querySelector('.header');
-let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
-  const currentScroll = window.scrollY;
-  if (currentScroll > 50) {
+  if (window.scrollY > 50) {
     header.classList.add('scrolled');
   } else {
     header.classList.remove('scrolled');
   }
-  lastScroll = currentScroll;
 });
 
-// Smooth reveal on scroll
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -50px 0px',
