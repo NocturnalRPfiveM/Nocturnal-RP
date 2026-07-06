@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nocturnal RP - A premier FiveM roleplay server. Live in the dark, rise at night.">
+  <title>Nocturnal RP | FiveM Roleplay Server</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="particles"></div>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">Nocturnal <span>RP</span></a>
+      <nav class="nav">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#features" class="nav-link">Features</a>
+      </nav>
+      <a href="https://discord.gg/9TF2AArxs7" target="_blank" rel="noopener noreferrer" class="discord-btn">Join Discord</a>
+    </div>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">NOW OPEN</div>
+      <h1 class="hero-title">Live in the Dark,<br><span>Rise at Night</span></h1>
+      <p class="hero-subtitle">Welcome to Nocturnal RP — a premier FiveM roleplay experience built on <strong>QB Core</strong>. Where every shadow holds a story and the night is yours to conquer.</p>
+      <div class="hero-cta">
+        <a href="https://discord.gg/9TF2AArxs7" target="_blank" rel="noopener noreferrer" class="cta-primary">Join Our Community</a>
+        <a href="#features" class="cta-secondary">Explore Features</a>
+      </div>
+      <div class="live-stats" id="liveStats">
+        <div class="stat-item">
+          <span class="stat-number" id="playerCount">--</span>
+          <span class="stat-label">Players Online</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" id="serverStatus">--</span>
+          <span class="stat-label">Server Status</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" id="maxPlayers">--</span>
+          <span class="stat-label">Max Slots</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">About</span>
+        <h2 class="section-title">Welcome to <span>Nocturnal RP</span></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="about-content">
+        <div class="about-text">
+          <p>Nocturnal RP is a immersive FiveM roleplay server where the night comes alive. We offer a serious roleplay experience with a focus on quality interactions, engaging storylines, and a welcoming community.</p>
+          <p>Built on the <strong>QB Core</strong> framework, our server delivers a stable, feature-rich environment with custom scripts, realistic economies, and endless opportunities for both new and veteran roleplayers.</p>
+          <p>Whether you're looking to build a life as a civilian, uphold the law, or walk the fine line between, Nocturnal RP is your home in the shadows.</p>
+        </div>
+        <div class="about-stats">
+          <div class="about-stat-card">
+            <span class="about-stat-number">500+</span>
+            <span class="about-stat-label">Discord Members</span>
+          </div>
+          <div class="about-stat-card">
+            <span class="about-stat-number">QB</span>
+            <span class="about-stat-label">Core Framework</span>
+          </div>
+          <div class="about-stat-card">
+            <span class="about-stat-number">24/7</span>
+            <span class="about-stat-label">Server Uptime</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Features</span>
+        <h2 class="section-title">What We <span>Offer</span></h2>
+        <div class="section-divider"></div>
+        <p class="section-desc">Everything you need for an unforgettable roleplay experience</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+          </div>
+          <h3>Civilian Life</h3>
+          <p>Build your story from the ground up. Choose from dozens of jobs, own property, run businesses, and create the life you've always dreamed of in Los Santos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+              <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+            </svg>
+          </div>
+          <h3>Law Enforcement</h3>
+          <p>Protect and serve with our detailed LSPD and BCSO departments. Complete with realistic uniforms, vehicles, protocols, and a fair chain of command.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <h3>Active Community</h3>
+          <p>Join a vibrant community of passionate roleplayers. Regular events, story arcs, and a staff team that truly cares about your experience.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3>QB Core Framework</h3>
+          <p>A powerful, optimized, and highly customizable framework. Custom scripts, smooth performance, and regular updates to keep the experience fresh.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3>Custom Economy</h3>
+          <p>A balanced, player-driven economy with legal and illegal opportunities. From honest work to heists — every choice has consequences.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+            </svg>
+          </div>
+          <h3>Custom Scripts</h3>
+          <p>Unique, hand-crafted scripts designed to enhance your roleplay experience. From immersive jobs to custom vehicles and beyond.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Rise?</h2>
+        <p>The night is waiting. Join Nocturnal RP and become part of a community that lives in the dark and rises at night.</p>
+        <a href="https://discord.gg/9TF2AArxs7" target="_blank" rel="noopener noreferrer" class="cta-primary">Join Our Discord</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">Nocturnal <span>RP</span></a>
+        <p>Live in the dark. Rise at night.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://discord.gg/9TF2AArxs7" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+      </div>
+      <div class="footer-copy">
+        <p>&copy; 2026 Nocturnal RP. All rights reserved. Not affiliated with Rockstar Games or Cfx.re.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
