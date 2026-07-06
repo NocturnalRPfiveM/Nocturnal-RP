@@ -7,30 +7,35 @@ const maxPlayersEl = document.getElementById('maxPlayers');
 
 async function fetchServerData() {
   try {
-    console.log('Fetching:', STATUS_DATA_URL);
     const response = await fetch(STATUS_DATA_URL);
-    console.log('Status:', response.status);
     if (!response.ok) throw new Error('HTTP ' + response.status);
     const data = await response.json();
-    console.log('Data:', data);
     updateStats(data);
-  } catch (err) {
-    console.error('Fetch failed:', err);
+  } catch (_) {
     setOffline();
   }
 }
 
 function updateStats(data) {
-  if (!data || data.clients === undefined) {
-    setOffline();
-    return;
-  }
+  if (!data || data.clients === undefined) { setOffline(); return; }
+
   const clients = parseInt(data.clients, 10) || 0;
   const maxClients = parseInt(data.sv_maxclients, 10) || 48;
+  const status = data.status || 'online';
+
   animateNumber(playerCountEl, clients);
-  serverStatusEl.textContent = 'Online';
-  serverStatusEl.style.color = '#4ade80';
   maxPlayersEl.textContent = maxClients;
+
+  if (status === 'restarting') {
+    serverStatusEl.textContent = 'Restarting...';
+    serverStatusEl.style.color = '#f59e0b';
+  } else if (status === 'online') {
+    serverStatusEl.textContent = 'Online';
+    serverStatusEl.style.color = '#4ade80';
+  } else {
+    serverStatusEl.textContent = 'Offline';
+    serverStatusEl.style.color = '#ef4444';
+  }
 }
 
 function setOffline() {

@@ -18,9 +18,9 @@ jobs:
         run: |
           data=$(curl -s --max-time 5 http://5.249.165.174:30106/dynamic.json 2>/dev/null || echo "")
           if [ -z "$data" ] || [ "$data" = "null" ]; then
-            echo '{"clients":0,"sv_maxclients":"48"}' > data/status.json
+            echo '{"status":"restarting","clients":0,"sv_maxclients":"48"}' > data/status.json
           else
-            echo "$data" > data/status.json
+            echo "$data" | sed 's/{/{"status":"online",/' > data/status.json
           fi
 
       - name: Commit and push
