@@ -1,6 +1,5 @@
-const BASE = window.location.pathname.replace(/\/?$/, '/');
-const STATUS_DATA_URL = BASE + 'data/status.json';
-const REFRESH_INTERVAL = 60000;
+const STATUS_DATA_URL = '/Nocturnal-RP/data/status.json';
+const REFRESH_INTERVAL = 15000;
 
 const playerCountEl = document.getElementById('playerCount');
 const serverStatusEl = document.getElementById('serverStatus');
@@ -8,11 +7,15 @@ const maxPlayersEl = document.getElementById('maxPlayers');
 
 async function fetchServerData() {
   try {
+    console.log('Fetching:', STATUS_DATA_URL);
     const response = await fetch(STATUS_DATA_URL);
-    if (!response.ok) throw new Error('Failed');
+    console.log('Status:', response.status);
+    if (!response.ok) throw new Error('HTTP ' + response.status);
     const data = await response.json();
+    console.log('Data:', data);
     updateStats(data);
-  } catch (_) {
+  } catch (err) {
+    console.error('Fetch failed:', err);
     setOffline();
   }
 }
